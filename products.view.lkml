@@ -9,6 +9,16 @@ view: products {
 
   dimension: brand {
     type: string
+    link:{
+    label:"Google"
+    url: "http://www.google.com/search?q={{ value }}"
+    icon_url: "http://google.com/favicon.ico"
+    }
+    link: {
+    label:"Facebook"
+    url:"http://www.facebook.com/q#?={{value}}"
+    icon_url: "http://www.sacredperuadventures.com/images/facebook.jpg"
+    }
     sql: ${TABLE}.brand ;;
   }
 
