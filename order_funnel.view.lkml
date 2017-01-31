@@ -2,16 +2,17 @@ view: order_funnel {
   derived_table: {
     distribution_style: all
     sortkeys: ["id"]
-    sql_trigger_value: SELECT 0 ;;
-    sql: SELECT a.id,
+    sql_trigger_value: SELECT current_date ;;
+    sql: SELECT orders.id,orders.user_id,orders.created_at,
     COUNT(b.id) AS subsequent_orders,
     min(b.created_at) AS second_order_date,
-    min(b.id) AS second_order_id
-    FROM orders a
+    min(b.id) AS second_order_id,
+    row_number() over(partition by orders.user_id order by orders.created_at) as sequence
+    FROM orders
     JOIN orders b
-    ON a.id=b.id
-    AND a.created_at < b.created_at
-    GROUP BY 1
+    ON orders.user_id=b.user_id
+    AND orders.created_at < b.created_at
+    GROUP BY 1,2,3
     ;;
   }
 
@@ -21,15 +22,18 @@ view: order_funnel {
     sql: ${TABLE}.id ;;
   }
 
+  dimension: subsequent_orders {
+    type: number
+    sql: ${TABLE}.subsequent_orders ;;
+  }
   dimension:  second_order_id{
     type: number
     sql: ${TABLE}.second_order_id ;;
   }
 
-  dimension_group:  second_order_date{
-    type: time
+  dimension_group:  second_order_date_raw{
+    hidden: yes
     sql: ${TABLE}.second_order_date ;;
-    timeframes: [date, month, year]
   }
 
   dimension: has_2nd_order {
@@ -39,8 +43,9 @@ view: order_funnel {
 
   dimension:  days_between_1st_2nd{
     type: number
-    sql: DATEDIFF('day',${orders.created_date},${TABLE}.second_order_date) ;;
+    sql: DATEDIFF('day',nullif(${TABLE}.created_at,0),nullif(${TABLE}.second_order_date,0)) ;;
   }
+
   dimension: 2nd_order_in_60_days {
     type: yesno
     sql: ${days_between_1st_2nd}<=60 ;;
@@ -56,7 +61,7 @@ view: order_funnel {
   measure: 60_day_repeat_purchase_rate {
     type: number
     value_format_name: decimal_2
-    sql: 1.0*${count_orders_60_days}/(nullif({orders.count},0)) ;;
+    sql: 1.0*${count_orders_60_days}/(nullif(${TABLE}.count,0)) ;;
   }
 
   measure: average_days_between_orders {
@@ -64,5 +69,8 @@ view: order_funnel {
     sql: ${days_between_1st_2nd} ;;
   }
 
+  measure: count {
+    type: count
+  }
 
 }

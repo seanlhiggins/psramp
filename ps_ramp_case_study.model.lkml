@@ -29,7 +29,7 @@ explore: order_items {
   }
 
   join: inventory_items {
-    type: left_outer
+    type: full_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
     relationship: many_to_one
   }
@@ -47,13 +47,13 @@ explore: order_items {
   }
 
   join: order_funnel {
-    type: left_outer
+    type: full_outer
     sql_on: ${orders.id}=${order_funnel.first_order_id} ;;
     relationship: one_to_one
   }
 
   join: order_sequence {
-    type: left_outer
+    type: full_outer
     sql_on: ${order_items.id}=${order_sequence.order_id} ;;
     relationship: one_to_one
   }
@@ -78,3 +78,10 @@ explore: product_facts {
 explore: products {}
 
 explore: users {}
+
+explore: order_funnel {
+  join: orders {
+    sql_on: ${orders.id}=${order_funnel.first_order_id} ;;
+    relationship: one_to_one
+  }
+}
