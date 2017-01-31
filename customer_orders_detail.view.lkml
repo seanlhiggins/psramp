@@ -5,20 +5,70 @@ view: customer_orders_detail {
     COUNT(*) as lifetime_orders,
     MIN(NULLIF(orders.created_at,0)) as first_order,
     MAX(NULLIF(orders.created_at,0)) as last_order,
+
     DATEDIFF('day',CURRENT_DATE,MAX(NULLIF(orders.created_at,0))) AS days_since_last_order,
     DATEDIFF('day',MIN(NULLIF(orders.created_at,0)),users.created_at) AS days_until_first_order,
     DATEDIFF('day',MAX(NULLIF(orders.created_at,0)),MIN(NULLIF(orders.created_at,0))) AS days_between_first_last_order,
-    COUNT(DISTINCT MONTH(NULLIF(orders.created_at,0))) AS distinct_months_orders,
-    order_items.sale_price as revenue
+    order_items.sale_price as sale_price,
+    products.brand as brand,
+    products.category as category,
+    users.created_at as signup_date,
+    DATEDIFF('day',NULLIF(users.created_at,0),CURRENT_DATE) AS days_since_signup,
+    DATEDIFF('month',NULLIF(users.created_at,0),CURRENT_DATE) AS months_since_signup
 
-      FROM users
-      JOIN orders
+
+      FROM orders
+      LEFT JOIN users
       ON users.id=orders.user_id
-      JOIN order_items
+      LEFT JOIN order_items
       ON orders.id=order_items.order_id
-      GROUP BY user_id;;
+      LEFT JOIN inventory_items
+      ON inventory_items.id=order_items.inventory_item_id
+      LEFT JOIN products
+      ON products.id=inventory_items.product_id
+      GROUP BY user_id,users.created_at,8,9,10;;
     indexes: ["user_id"]
     sql_trigger_value: SELECT 0 ;;
+    distribution_style: all
+  }
+
+  dimension:  days_since_signup{
+    type: number
+    sql: ${TABLE}.days_since_signup ;;
+  }
+  dimension:  months_since_signup{
+    type: number
+    sql: ${TABLE}.months_since_signup ;;
+  }
+  measure: average_days_since_signup {
+    type: average
+    sql: ${days_since_signup} ;;
+  }
+  measure: average_months_since_signup {
+    type: average
+    sql: ${months_since_signup} ;;
+  }
+
+  dimension: brand {
+    sql: ${TABLE}.brand ;;
+  }
+  dimension: category {
+    sql: ${TABLE}.category ;;
+  }
+
+  dimension: days_since_last_order {
+    type: number
+    sql: ${TABLE}.days_since_last_order ;;
+  }
+  dimension_group: first_order {
+    type: time
+    timeframes: [date,week,month,year]
+    sql: ${TABLE}.first_order ;;
+  }
+  dimension_group: last_order {
+    type: time
+    timeframes: [date,week,month,year]
+    sql: ${TABLE}.last_order ;;
   }
   dimension: user_id {
     type: number
@@ -38,7 +88,12 @@ view: customer_orders_detail {
   dimension: sale_price {
     type: number
     value_format_name: usd
-    sql: ${TABLE}.revenue ;;
+    sql: ${TABLE}.sale_price ;;
+  }
+  dimension: sale_price_groups {
+    type: tier
+    tiers: [50,100,150,200,250,300,350,400,450,500]
+    sql: ${sale_price} ;;
   }
   dimension: is_active {
     type: yesno
@@ -63,81 +118,27 @@ view: customer_orders_detail {
     type: tier
     value_format_name: usd
     tiers: [4.99,19.99,49.99,99.99,499.99,999.99,1000]
-    sql: ${TABLE}.revenue ;;
+    sql: ${TABLE}.sale_price ;;
   }
   measure: total_orders_amount {
     type: sum
+    sql: ${lifetime_orders} ;;
+  }
+  measure: total_repeat_orders {
+    type: sum
+    filters: {
+      field: is_repeat_customer
+      value: "yes"
+    }
+    sql: ${lifetime_orders} ;;
+  }
+  measure: percent_of_total {
+    type: percent_of_total
+    value_format_name: decimal_2
     sql: ${lifetime_orders} ;;
   }
   measure: average_lifetime_orders {
     type: average
     sql: ${lifetime_orders} ;;
   }
-  # # You can specify the table name if it's different from the view name:
-  # sql_table_name: my_schema_name.tester ;;
-  #
-  # # Define your dimensions and measures here, like this:
-  # dimension: user_id {
-  #   description: "Unique ID for each user that has ordered"
-  #   type: number
-  #   sql: ${TABLE}.user_id ;;
-  # }
-  #
-  # dimension: lifetime_orders {
-  #   description: "The total number of orders for each user"
-  #   type: number
-  #   sql: ${TABLE}.lifetime_orders ;;
-  # }
-  #
-  # dimension_group: most_recent_purchase {
-  #   description: "The date when each user last ordered"
-  #   type: time
-  #   timeframes: [date, week, month, year]
-  #   sql: ${TABLE}.most_recent_purchase_at ;;
-  # }
-  #
-  # measure: total_lifetime_orders {
-  #   description: "Use this for counting lifetime orders across many users"
-  #   type: sum
-  #   sql: ${lifetime_orders} ;;
-  # }
 }
-
-# view: customer_orders_detail {
-#   # Or, you could make this view a derived table, like this:
-#   derived_table: {
-#     sql: SELECT
-#         user_id as user_id
-#         , COUNT(*) as lifetime_orders
-#         , MAX(orders.created_at) as most_recent_purchase_at
-#       FROM orders
-#       GROUP BY user_id
-#       ;;
-#   }
-#
-#   # Define your dimensions and measures here, like this:
-#   dimension: user_id {
-#     description: "Unique ID for each user that has ordered"
-#     type: number
-#     sql: ${TABLE}.user_id ;;
-#   }
-#
-#   dimension: lifetime_orders {
-#     description: "The total number of orders for each user"
-#     type: number
-#     sql: ${TABLE}.lifetime_orders ;;
-#   }
-#
-#   dimension_group: most_recent_purchase {
-#     description: "The date when each user last ordered"
-#     type: time
-#     timeframes: [date, week, month, year]
-#     sql: ${TABLE}.most_recent_purchase_at ;;
-#   }
-#
-#   measure: total_lifetime_orders {
-#     description: "Use this for counting lifetime orders across many users"
-#     type: sum
-#     sql: ${lifetime_orders} ;;
-#   }
-# }

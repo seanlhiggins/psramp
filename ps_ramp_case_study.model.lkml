@@ -14,6 +14,13 @@ explore: inventory_items {
   }
 }
 
+explore: customer_orders_detail {
+  join: users {
+    type: left_outer
+    sql_on: ${users.id}=${customer_orders_detail.user_id} ;;
+    relationship: one_to_one
+  }
+}
 explore: order_items {
   join: orders {
     type: left_outer
@@ -37,6 +44,18 @@ explore: order_items {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
     relationship: many_to_one
+  }
+
+  join: order_funnel {
+    type: left_outer
+    sql_on: ${orders.id}=${order_funnel.first_order_id} ;;
+    relationship: one_to_one
+  }
+
+  join: order_sequence {
+    type: left_outer
+    sql_on: ${order_items.id}=${order_sequence.order_id} ;;
+    relationship: one_to_one
   }
 }
 
