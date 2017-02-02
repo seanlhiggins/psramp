@@ -9,13 +9,16 @@ view: order_funnel {
     min(b.id) AS second_order_id,
     row_number() over(partition by orders.user_id order by orders.created_at) as sequence
     FROM orders
-    JOIN orders b
+    LEFT JOIN orders b
     ON orders.user_id=b.user_id
     AND orders.created_at < b.created_at
     GROUP BY 1,2,3
     ;;
   }
-
+  dimension: sequence {
+    type: number
+    sql: ${TABLE}.sequence ;;
+  }
   dimension:  first_order_id{
     type: number
     primary_key: yes
@@ -32,13 +35,13 @@ view: order_funnel {
   }
 
   dimension_group:  second_order_date_raw{
-    hidden: yes
+
     sql: ${TABLE}.second_order_date ;;
   }
 
   dimension: has_2nd_order {
     type: yesno
-    sql: ${second_order_id}>0 ;;
+    sql: ${TABLE}.subsequent_orders>0 ;;
   }
 
   dimension:  days_between_1st_2nd{
@@ -60,14 +63,34 @@ view: order_funnel {
   }
   measure: 60_day_repeat_purchase_rate {
     type: number
-    value_format_name: decimal_2
-    sql: 1.0*${count_orders_60_days}/(nullif(${TABLE}.count,0)) ;;
+    value_format: "#.#\%"
+    sql: 100.0*${count_orders_60_days}/(${orders.count},0) ;;
   }
 
   measure: average_days_between_orders {
     type: average
     sql: ${days_between_1st_2nd} ;;
   }
+
+  measure: count_repeats {
+    type: count
+    filters: {
+      field: has_2nd_order
+      value: "yes"
+    }
+    }
+   measure: count_non_repeats {
+    type: count
+    filters: {
+      field: has_2nd_order
+      value: "no"
+    }
+    }
+    measure: repeat_differential_rate {
+      type: number
+      value_format_name: percent_2
+      sql: ${count}/nullif(${count_non_repeats},0) ;;
+    }
 
   measure: count {
     type: count

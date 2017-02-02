@@ -38,6 +38,23 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
+# BRAND COMPARE
+  filter:brand_select{
+    suggest_dimension: products.brand
+  }
+  dimension: brand_comparitor{
+  sql:
+  CASE WHEN {% condition brand_select %} ${products.brand} {% endcondition %}
+  THEN "(1) "||${products.brand}
+  ELSE "(2) All Other Brands"
+  END;;
+  }
+
+# AVERAGES
+  measure: avg_total {
+    type: average
+    sql:  ;;
+  }
 #PS Ramp Added dims/meas
   measure: total_sale_price {
     type: sum
@@ -46,6 +63,7 @@ view: order_items {
 
   measure: avg_sale_price {
     type: average
+    value_format_name: usd
     sql: ${sale_price} ;;
   }
 
@@ -96,6 +114,11 @@ view: order_items {
     sql: ${count} ;;
   }
 
+  measure: percent_total_count {
+    type: percent_of_total
+    direction: "column"
+    sql: ${count} ;;
+  }
   #Revenue
   measure: total_revenue_minus_returns {
     type: sum
@@ -118,8 +141,28 @@ view: order_items {
   measure: total_revenue_percent {
     type: percent_of_total
     value_format_name: decimal_4
-    sql: ${total_revenue} ;;
+    sql: ${total_revenue_minus_returns} ;;
   }
+#   measure: total_revenue_this_item {
+#     type: sum
+#     sql: ${sale_price} ;;
+#     filters: {
+#       field: brand_comparitor
+#       value:
+#     }
+#   }
+#   measure: total_revenue_this_brand {
+#     type: sum
+#     sql: ${sale_price} ;;
+#     filters: {
+#       field: brand_comparitor
+#       value: "(2)%, (1)%"
+#     }
+#   }
+#   measure: share_of_wallet_within_brand {
+#     type: number
+#     sql: 100.0*${total_revenue_this_item}/nullif(${total_revenue_this_brand},0) ;;
+#   }
   measure: total_returned_items {
     type: sum
     sql: ${id} WHERE is_completed_sale ='no' ;;
@@ -154,7 +197,44 @@ view: order_items {
     sql: 1.0*(NULLIF(${total_sale_price},0)/(NULLIF(${total_customers},0))) ;;
   }
 
-  measure: count {
+#COMPARITOR MEASURES
+#   measure: total_sale_price_this_item{
+#     type: sum
+#     sql: ${sale_price};;
+#     filters:{
+#     field: products.item_name
+# }
+# }
+#   measure: total_sale_price_this_brand{
+#     type: sum
+#     sql: ${sale_price};;
+#     filters:{
+#       field: products.brand
+
+
+#       }
+#     }
+#   measure: share_of_wallet_within_brand{
+#     type: number
+#     description: "This item sales over all sales for same brand"
+#     value_format: "#.00\%"
+#     sql: 100.0 *  ${total_sale_price_this_item}*1.0 / nullif(${total_sale_price_this_brand},0)
+#     ;;
+#     }
+
+#   measure: share_of_wallet_within_company{
+#     description: "This item sales over all sales across website"
+#     value_format: "#.00\%"
+#     type: number
+#     sql: 100.0 *  ${total_sale_price_this_item}*1.0 / nullif(${total_sale_price},0);;
+# }
+#   measure: share_of_wallet_brand_within_company{
+#     description: "This brand''s sales over all sales across website"
+#     value_format: "#.00\%"
+#     type: number
+#     sql: 100.0 *  ${total_sale_price_this_brand}*1.0 / nullif(${total_sale_price},0);;
+# }
+ measure: count {
     type: count
     drill_fields: [id, orders.id, inventory_items.id, products.brand, products.category]
   }

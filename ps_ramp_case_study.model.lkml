@@ -7,6 +7,7 @@ include: "*.view"
 include: "*.dashboard"
 
 explore: inventory_items {
+  fields: [ALL_FIELDS*,-products.brand_comparitor]
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
@@ -22,6 +23,7 @@ explore: customer_orders_detail {
   }
 }
 explore: order_items {
+  fields: [ALL_FIELDS*,-products.brand_comparitor,-users.id]
   join: orders {
     type: left_outer
     sql_on: ${order_items.order_id} = ${orders.id} ;;
@@ -65,9 +67,15 @@ explore: orders {
     sql_on: ${orders.user_id} = ${users.id} ;;
     relationship: many_to_one
   }
+  join: order_sequence {
+    type: full_outer
+    relationship: one_to_one
+    sql_on: ${order_sequence.order_id}=${orders.id} ;;
+  }
 }
 
 explore: product_facts {
+  fields: [ALL_FIELDS*,-products.brand_comparitor]
   join: products {
     type: left_outer
     sql_on: ${product_facts.product_id} = ${products.id} ;;
@@ -75,7 +83,25 @@ explore: product_facts {
   }
 }
 
-explore: products {}
+explore: products {
+  fields: [ALL_FIELDS*,-order_items.total_customers,-order_items.total_customers_returning_items]
+
+  join: num {
+    type: cross
+    relationship: one_to_many
+  }
+  join: inventory_items {
+    type: left_outer
+    relationship: one_to_many
+    sql_on:  ${products.id}=${inventory_items.product_id};;
+  }
+
+join: order_items {
+  type: full_outer
+  sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
+  relationship: many_to_one
+}
+}
 
 explore: users {}
 
