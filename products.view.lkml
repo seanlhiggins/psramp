@@ -10,11 +10,14 @@ view: products {
   dimension: brand {
     type: string
     sql: ${TABLE}.brand ;;
-  }
+    suggest_dimension: brand
+    }
+
 
   dimension: category {
     type: string
     sql: ${TABLE}.category ;;
+    suggest_dimension: category
   }
 
   dimension: department {

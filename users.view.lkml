@@ -1,5 +1,19 @@
-view: users {
-  sql_table_name: demo_db.users ;;
+view: users  {
+    sql_table_name: {% if _model._name == 'demo' %}
+      public.orders
+    {% else %}
+      public.users
+    {% endif %}
+     ;;
+
+
+filter: x {
+  suggestions: ["a","b"]
+}
+
+# dimension: x {
+#   sql: "a" ;;
+# }
 
   dimension: id {
     primary_key: yes
@@ -14,8 +28,14 @@ view: users {
 
   dimension: is_under_30 {
     type: yesno
-    sql: ${age} < 30 ;;
+    # hidden: yes
+    sql: ${TABLE}.age < 30 ;;
   }
+
+ dimension: is_under_30_and_over_60 {
+   type: yesno
+  sql: ${is_under_30}='yes' AND ${age)<60 ;;
+ }
 
 
   dimension: age_tier {
@@ -34,28 +54,42 @@ view: users {
     type: string
     sql: ${TABLE}.country ;;
   }
-
-  dimension_group: created {
-    type: time
-    timeframes: [time, date, week, month, day_of_week]
-    sql: ${TABLE}.created_at ;;
-  }
-
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
   }
 
+  dimension_group: created {
+    type: time
+    timeframes: [time, date, week, month, day_of_week, day_of_week_index]
+    sql: ${TABLE}.created_at ;;
+  }
+
+
   dimension: 1_week_ago {
     type: string
-    sql:  DATE_DIFF('day',CURRENT_DATE()-7,CURRENT_DATE());;
+    sql:  DATE_ADD(CURRENT_DATE(), INTERVAL -7 DAY);;
+    hidden: yes
   }
 
-  dimension: is_more_than_one_week_ago {
+  dimension: signup_diff {
+    type: number
+    sql: DATEDIFF(${created_date},${1_week_ago}) ;;
+    hidden: yes
+  }
+
+  dimension: signup_is_less_than_one_month_ago {
     type: yesno
-    sql: ${1_week_ago} < 7 ;;
+    sql: ${signup_diff} < -30 ;;
   }
 
+  measure: count_users_last_one_months_signup {
+    type: count
+    filters: {
+      field: signup_is_less_than_one_month_ago
+      value: "no"
+    }
+  }
   dimension: first_name {
     type: string
     sql: ${TABLE}.first_name ;;
@@ -89,9 +123,58 @@ view: users {
     }
     drill_fields: [detail*]
   }
+
+  measure: utilization{
+    type: number
+    value_format: "0.00%"
+    sql: CASE WHEN ${count_users_under_30}=0 THEN 0 ELSE ${num_orders_active_measure}/${slot_maximum_actual_measure} end;;
+    html:
+    {% if value >= 0.75 %}
+    <p style = "color: darkgreen; background-color: lightgreen;"><a href="https://localhost:9999/looks/56"> {{ rendered_value }}</a></p>
+    {% elsif value < 0.6 %}
+    <p style = "color: darkred; background-color: lightcoral;"><a href="https://localhost:9999/looks/56"> {{ rendered_value }}</a></p>
+    {% else %}
+    <p style = "color: darkgoldenrod; background-color: lightgoldenrodyellow;"><a href="https://localhost:9999/looks/56"> {{ rendered_value }}</a></p>
+    {% endif %};;
+
+      drill_fields: [created_date, slot_maximum_actual_measure, num_orders_active_measure, utilization]
+      link: {
+        label: "Utilization Explore"
+        url: "https://localhost:9999/looks/56"
+      }
+    }
+
+
+    measure: num_orders_active_measure {
+      type: sum
+#value_format: "0.00"
+      drill_fields: [created_date, slot_maximum_actual_measure, num_orders_active_measure]
+
+      sql: ${age};;
+      link: {
+        label: "Daily Explore"
+        url: "https://localhost:9999/looks/57"
+      }
+    }
+
+    measure: slot_maximum_actual_measure {
+      type: sum
+      sql: ${age} +1  ;;
+      drill_fields: [created_date, slot_maximum_actual_measure, num_orders_active_measure]
+
+      link: {
+        label: "Daily Explore"
+        url: "https://localhost:9999/looks/57"
+      }
+    }
+
   measure: count {
     type: count
     drill_fields: [detail*]
+  }
+  measure: count_distinct_users_age {
+    type: count_distinct
+    sql:  ${age};;
   }
 
   # ----- Sets of fields for drilling ------
