@@ -10,8 +10,15 @@ view: inventory_items {
   dimension: cost {
     type: number
     sql: ${TABLE}.cost ;;
+    value_format: "$#.000;($#.000)"
   }
 
+  measure: total_cost {
+    type: sum
+    sql: ${cost}/0.001 ;;
+    value_format: "$#.000;($#.000)"
+    # value_format_name: usd_0
+  }
   dimension_group: created {
     type: time
     timeframes: [time, date, week, month]

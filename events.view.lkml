@@ -15,9 +15,11 @@ view: events {
 
   dimension: type_id {
     type: number
-    sql: ${TABLE}.type_id ;;
+    sql: ${TABLE}.type ;;
+
   }
 
+#This is a comment
   dimension: user_id {
     type: number
     # hidden: yes
