@@ -13,6 +13,9 @@ explore: events {
     relationship: many_to_one
   }
 }
+explore: products_2 {
+  from: products
+}
 
 explore: inventory_items {
   join: products {
