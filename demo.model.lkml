@@ -17,6 +17,10 @@ explore: products_2 {
   from: products
 }
 
+explore: products_3 {
+  from: products
+}
+
 explore: inventory_items {
   join: products {
     type: left_outer
