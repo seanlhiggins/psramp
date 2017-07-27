@@ -1,19 +1,9 @@
 view: users  {
-    sql_table_name: {% if _model._name == 'demo' %}
-      public.orders
-    {% else %}
-      public.users
-    {% endif %}
-     ;;
+    sql_table_name: demo_db.users;;
 
-
-filter: x {
-  suggestions: ["a","b"]
-}
-
-# dimension: x {
-#   sql: "a" ;;
-# }
+#####################################################
+###################### Dimensions ###################
+#####################################################
 
   dimension: id {
     primary_key: yes
@@ -24,25 +14,6 @@ filter: x {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
-  }
-
-  dimension: is_under_30 {
-    type: yesno
-    # hidden: yes
-    sql: ${TABLE}.age < 30 ;;
-  }
-
- dimension: is_under_30_and_over_60 {
-   type: yesno
-  sql: ${is_under_30}='yes' AND ${age)<60 ;;
- }
-
-
-  dimension: age_tier {
-    type: tier
-    sql: ${age} ;;
-    tiers: [18,35,50]
-    style: integer
   }
 
   dimension: city {
@@ -65,31 +36,6 @@ filter: x {
     sql: ${TABLE}.created_at ;;
   }
 
-
-  dimension: 1_week_ago {
-    type: string
-    sql:  DATE_ADD(CURRENT_DATE(), INTERVAL -7 DAY);;
-    hidden: yes
-  }
-
-  dimension: signup_diff {
-    type: number
-    sql: DATEDIFF(${created_date},${1_week_ago}) ;;
-    hidden: yes
-  }
-
-  dimension: signup_is_less_than_one_month_ago {
-    type: yesno
-    sql: ${signup_diff} < -30 ;;
-  }
-
-  measure: count_users_last_one_months_signup {
-    type: count
-    filters: {
-      field: signup_is_less_than_one_month_ago
-      value: "no"
-    }
-  }
   dimension: first_name {
     type: string
     sql: ${TABLE}.first_name ;;
@@ -114,6 +60,9 @@ filter: x {
     type: number
     sql: ${TABLE}.zip ;;
   }
+#####################################################
+###################### Measures #####################
+#####################################################
 
   measure: count_users_under_30 {
     type: count

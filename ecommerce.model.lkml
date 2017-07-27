@@ -13,13 +13,8 @@ explore: events {
     relationship: many_to_one
   }
 }
-explore: products_2 {
-  from: products
-}
 
-explore: products_3 {
-  from: products
-}
+#test comment again
 
 explore: inventory_items {
   join: products {

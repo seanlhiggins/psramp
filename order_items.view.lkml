@@ -1,6 +1,10 @@
 view: order_items {
   sql_table_name: demo_db.order_items ;;
 
+#####################################################
+###################### Dimensions ###################
+#####################################################
+
   dimension: id {
     primary_key: yes
     type: number
@@ -28,6 +32,22 @@ view: order_items {
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
+  }
+
+#####################################################
+###################### Measures######################
+#####################################################
+
+  measure: total_sale_price {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+  }
+
+  measure: average_spend_per_user {
+    type: number
+    value_format_name: usd
+    sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
   }
 
   measure: count {

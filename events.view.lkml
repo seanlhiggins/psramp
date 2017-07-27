@@ -2,9 +2,9 @@ view: events {
   sql_table_name: demo_db.events ;;
 
   dimension: id {
-    primary_key: yes
+    # primary_key: yes
     type: number
-    sql: ${TABLE}.id ;;
+    sql: ${TABLE}.id_2 ;;
   }
 
   dimension_group: created {

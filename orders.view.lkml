@@ -23,6 +23,16 @@ view: orders {
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+  measure: conditional_count {
+    type: count_distinct
+    sql: {% if orders.status._in_query %}
+      ${status}
+      {% elsif orders.user_id._in_query %}
+      ${user_id}
+      {% else %}
+      NULL
+      {% endif %};;
+  }
 
   measure: count {
     type: count
