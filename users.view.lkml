@@ -16,8 +16,20 @@ view: users  {
     sql: ${TABLE}.age ;;
   }
 
+  dimension: age_tier {
+    type: tier
+    tiers: [18,35,50,85]
+    sql:  ${age};;
+    style: integer
+  }
+
+  dimension: is_user_under_30 {
+    type: yesno
+    sql: ${age} < 30 ;;
+  }
+
+
   dimension: city {
-    type: string
     sql: ${TABLE}.city ;;
   }
 
@@ -32,7 +44,7 @@ view: users  {
 
   dimension_group: created {
     type: time
-    timeframes: [time, date, week, month, day_of_week, day_of_week_index]
+    timeframes: [time, date, week, month, day_of_week, day_of_week_index,second]
     sql: ${TABLE}.created_at ;;
   }
 
@@ -60,17 +72,41 @@ view: users  {
     type: number
     sql: ${TABLE}.zip ;;
   }
+
+  dimension: signup_diff {
+    type: number
+    sql: DATEDIFF(NOW(),${created_date}) ;;
+    hidden: yes
+  }
+  dimension: is_signup_diff_less_30 {
+    type: yesno
+    sql: ${signup_diff} < 30 ;;
+    hidden: yes
+  }
 #####################################################
 ###################### Measures #####################
 #####################################################
 
+  measure: count_users_signup_last_30_days {
+    type: count
+    filters: {
+      field: is_signup_diff_less_30
+      value: "yes"
+    }
+  }
+
   measure: count_users_under_30 {
     type: count
     filters: {
-      field: age
-      value: "<30"
+      field: is_user_under_30
+      value: "yes"
     }
     drill_fields: [detail*]
+  }
+
+  measure: count_distinct_ages {
+    type: count_distinct
+    sql:  ${age};;
   }
 
   measure: utilization{

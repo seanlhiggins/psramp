@@ -14,7 +14,7 @@ explore: events {
   }
 }
 
-#test comment again
+explore: user_orders_facts {}
 
 explore: inventory_items {
   join: products {
@@ -53,14 +53,18 @@ explore: order_items {
 explore: orders {
   join: users {
     type: left_outer
-    sql_on: ${orders.user_id} = ${users.id} ;;
+    sql_on: ${users.id}=${orders.user_id} ;;
     relationship: many_to_one
+  }
+  join: user_orders_facts {
+    type: left_outer
+    sql_on: ${user_orders_facts.user_id}=${users.id} ;;
+    relationship: one_to_one
   }
 }
 
 explore: products {}
 
 explore: schema_migrations {}
-
 
 explore: users {}
