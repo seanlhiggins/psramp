@@ -14,6 +14,8 @@ explore: events {
   }
 }
 
+#test comment
+
 explore: user_orders_facts {}
 
 explore: inventory_items {
@@ -25,6 +27,13 @@ explore: inventory_items {
 }
 
 explore: order_items {
+  conditionally_filter: {
+    filters: {
+      field: users.age
+      value: ">35"
+    }
+    unless: [users.country]
+  }
   join: inventory_items {
     type: left_outer
     sql_on: ${inventory_items.id} = ${order_items.inventory_item_id}  ;;

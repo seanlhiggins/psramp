@@ -6,9 +6,14 @@ view: users  {
 #####################################################
 
   dimension: id {
-    primary_key: yes
+#     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
+  }
+
+  dimension: pseudo_primary {
+  type: string
+  sql: CONCAT(${TABLE}.city) ;;
   }
 
   dimension: age {
