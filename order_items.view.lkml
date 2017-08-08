@@ -34,20 +34,22 @@ view: order_items {
     sql: ${TABLE}.sale_price ;;
   }
 
+
 #####################################################
 ###################### Measures######################
 #####################################################
 
-  measure: total_sale_price {
+  measure: lifetime_revenue {
     type: sum
     value_format_name: usd
     sql: ${sale_price} ;;
   }
 
+
   measure: average_spend_per_user {
     type: number
     value_format_name: usd
-    sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
+    sql: 1.0 * ${lifetime_revenue} / NULLIF(${users.count},0) ;;
   }
 
   measure: count {

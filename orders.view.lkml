@@ -23,6 +23,19 @@ view: orders {
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+
+
+#################### MIN AND MAX ORDER DATES####################
+
+  measure: first_order_date {
+    type: date
+    sql:  MIN(NULLIF(orders.created_at,0));;
+}
+  measure: last_order_date {
+    type: date
+    sql:  MAX(NULLIF(orders.created_at,0));;
+  }
+
   measure: conditional_count {
     type: count_distinct
     sql: {% if orders.status._in_query %}
@@ -33,6 +46,7 @@ view: orders {
       NULL
       {% endif %};;
   }
+
 
   measure: count {
     type: count
