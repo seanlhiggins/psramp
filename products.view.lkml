@@ -20,6 +20,12 @@ view: products {
     suggest_dimension: category
   }
 
+  dimension: test_dimension {
+    type: string
+    sql: ${brand} ;;
+    html: {{_user_attributes['brand']}} ;;
+  }
+
   dimension: department {
     type: string
     sql: ${TABLE}.department ;;

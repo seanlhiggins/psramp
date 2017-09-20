@@ -14,11 +14,24 @@ explore: events {
   }
 }
 
+datagroup:  default{
+  sql_trigger: SELECT CURRENTDATE() ;;
+}
+
+datagroup: items {
+  sql_trigger: SELECT max(id) FROM etl_jobs ;;
+}
+
 #test comment
 
 explore: user_orders_facts {}
 
 explore: inventory_items {
+  persist_with: items
+  access_filter: {
+    field: products.brand
+    user_attribute: brand
+  }
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
@@ -27,13 +40,12 @@ explore: inventory_items {
 }
 
 explore: order_items {
-  conditionally_filter: {
-    filters: {
-      field: users.age
-      value: ">35"
-    }
-    unless: [users.country]
-  }
+#   persist_with: default
+#   access_filter: {
+#     field: products.brand
+#     user_attribute: brand
+#   }
+
   join: inventory_items {
     type: left_outer
     sql_on: ${inventory_items.id} = ${order_items.inventory_item_id}  ;;
@@ -72,8 +84,27 @@ explore: orders {
   }
 }
 
-explore: products {}
+# explore: products {
+#   access_filter: {
+#     field: products.brand
+#     user_attribute: brand
+#   }
+# }
 
 explore: schema_migrations {}
 
-explore: users {}
+explore: users {
+  join: user_facts_view {
+    sql_on: ${users.id} = ${user_facts_view.orders_user_id} ;;
+    relationship: one_to_one
+  }
+}
+
+# explore: users_new {
+#   extends: [users]
+#   from: users
+#   sql_always_where: ${users.age} >18 ;;
+#   join: orders {
+#     sql_on: ${users.id} = ${orders.user_id} ;;
+#   }
+# }

@@ -9,10 +9,11 @@ view: user_orders_facts {
       FROM orders
       JOIN order_items
       ON orders.id = order_items.order_id
+      WHERE {% condition order_ids %} orders.id {% endcondition %}
       GROUP BY user_id
        ;;
 #       persist_for: "24 hours"
-      sql_trigger_value: SELECT CURRENT_DATE() ;;
+      # sql_trigger_value: SELECT CURRENT_DATE() ;;
       indexes: ["user_id"]
   }
 
@@ -20,6 +21,8 @@ view: user_orders_facts {
     type: count
     drill_fields: [detail*]
   }
+
+  filter: order_ids {}
 
   dimension: user_id {
     type: number

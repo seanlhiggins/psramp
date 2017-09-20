@@ -4,7 +4,7 @@
   <div style="width: 100%; clear: both; float: left; padding-top: 40px; padding-bottom: 100px;">
     <div style="width: 85%; margin: auto;">
       <div style="padding-left: 40px; padding-bottom: 20px; float:left; width: 50%;">
-        <img style="border-radius: 50%; width: 100px; float:left;" src="https://emojipedia-us.s3.amazonaws.com/cache/a1/c4/a1c49bf55e8da65b0a6fc05586a83acd.png">
+        <img style="border-radius: 50%; width: 100px; float:left;" src="https://oasishr.com/wp-content/uploads/2015/04/recruiter-KPIs.png">
         <div style="float:left; text-align: left; padding-left: 15px; padding-top: 15px;">
           <p>
             <span style="font-size: 16px;"><a href="https://localhost:9999/dashboards/22">KPIs</a></span><br>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div style="padding-left: 20px; padding-bottom: 20px; float:left; width: 50%;">
-        <img style="border-radius: 50%; width: 100px; float:left;" src="http://emojipedia-us.s3.amazonaws.com/cache/22/39/22399252e32d2c115467c78f32cad477.png">
+        <img style="border-radius: 50%; width: 100px; float:left;" src="https://cdn1.iconfinder.com/data/icons/money-currency-extras/512/Dollar_Return_Arrow-512.png">
         <div style="float:left; text-align: left; padding-left: 5px; padding-top: 15px;">
           <p>
             <span style="font-size: 16px;"><a href="https://localhost:9999/dashboards/7">Revenue & Spend</a></span><br>
@@ -24,7 +24,7 @@
 
 
       <div style="padding-left: 40px;float:left; width: 50%;">
-        <img style="border-radius: 50%; width: 100px; float:left;" src="http://emojipedia-us.s3.amazonaws.com/cache/cc/7e/cc7ef200b7f4f0cd78e917d65d651260.png">
+        <img style="border-radius: 50%; width: 100px; float:left;" src="https://maxcdn.icons8.com/Share/icon/dotty/Business//accounting1600.png">
         <div style="float:left; text-align: left; padding-left: 15px; padding-top: 15px;">
           <p>
             <span style="font-size: 16px;"><a href="https://localhost:9999/dashboards/29">P&Ls</a></span><br>
@@ -34,7 +34,7 @@
       </div>
 
       <div style="padding-left: 20px; padding-bottom: 20px; float:left; width: 50%;">
-        <img style="border-radius: 50%; width: 100px; float:left;" src="http://emojipedia-us.s3.amazonaws.com/cache/8e/47/8e47f5dfe1b3e60aa4d47e78c3f3cc58.png">
+        <img style="border-radius: 50%; width: 100px; float:left;" src="https://d30y9cdsu7xlg0.cloudfront.net/png/51033-200.png">
         <div style="float:left; text-align: left; padding-left: 15px; padding-top: 15px;">
           <p>
             <span style="font-size: 16px;"><a href="https://localhost:9999/dashboards/18">Hourly</a></span><br>
@@ -54,7 +54,7 @@
       </div>
 
       <div style="padding-left: 20px; padding-bottom: 20px; float:left; width: 50%;">
-        <img style="border-radius: 50%; width: 100px; float:left;" src="http://emojipedia-us.s3.amazonaws.com/cache/e5/21/e521e47e1543161827f1dfc9ea3bfad2.png">
+        <img style="border-radius: 50%; width: 100px; float:left;" src="https://d30y9cdsu7xlg0.cloudfront.net/png/117210-200.png">
         <div style="float:left; text-align: left; padding-left: 15px; padding-top: 15px;">
           <p>
             <span style="font-size: 16px;"><a href="https://localhost:9999/dashboards/26">Marketing</a></span><br>

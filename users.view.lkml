@@ -6,7 +6,8 @@ view: users  {
 #####################################################
 
   dimension: id {
-#     primary_key: yes
+    primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
@@ -53,6 +54,7 @@ view: users  {
     sql: ${TABLE}.created_at ;;
   }
 
+
   dimension: first_name {
     type: string
     sql: ${TABLE}.first_name ;;
@@ -71,6 +73,7 @@ view: users  {
   dimension: state {
     type: string
     sql: ${TABLE}.state ;;
+    map_layer_name: us_states
   }
 
   dimension: zip {
