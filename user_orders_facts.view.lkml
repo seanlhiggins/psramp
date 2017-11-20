@@ -5,6 +5,7 @@ view: user_orders_facts {
         , SUM(order_items.sale_price) AS lifetime_revenue
         , MIN(NULLIF(orders.created_at,0)) as first_order
         , MAX(NULLIF(orders.created_at,0)) as latest_order
+        , SUM(COALESCE(order_items.sale_price,0)) as lifetime_revenue
         , COUNT(DISTINCT EXTRACT(YEAR_MONTH FROM orders.created_at)) as number_of_distinct_months_with_orders
       FROM orders
       JOIN order_items

@@ -25,7 +25,7 @@ view: order_items {
 
   dimension_group: returned {
     type: time
-    timeframes: [time, date, week, month]
+    timeframes: [time, date, week, minute30, month]
     sql: ${TABLE}.returned_at ;;
   }
 
