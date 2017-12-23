@@ -7,6 +7,10 @@ include: "*.view"
 include: "*.dashboard"
 
 explore: events {
+  access_filter: {
+    field: users.email
+    user_attribute: email
+  }
   join: users {
     type: left_outer
     sql_on: ${events.user_id} = ${users.id} ;;

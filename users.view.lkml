@@ -18,6 +18,7 @@ view: users  {
   }
 
   dimension: age {
+    label: "{% if _user_attributes['see_hidden_fields'] == 'yes' %}Age(now unhidden!){% else %}{% endif %}"
     type: number
     sql: ${TABLE}.age ;;
   }
@@ -36,6 +37,7 @@ view: users  {
 
 
   dimension: city {
+    label: " {% if _user_attributes['language']  == 'Arabic' %} مدينة {%  else %} City {% endif %}"
     sql: ${TABLE}.city ;;
   }
 
