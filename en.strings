@@ -1,14 +1,26 @@
-"age_label" = "Age";
-"age_description" = "Age of User";
-
-"gender_label" = "Gender";
+"whole_model_label" = "E-Commerce";
+"users_view_label" = "Users";
+"users_label" = "Users";
+"name" = "Name";
 "first_name_label" = "First Name";
-
+"city" = "City";
+"country" = "Country";
+"age_label" = "Age";
+"age_description" = "Age";
+"gender_label" = "Gender";
 "date_group_label" = "Date";
 "date_label" = "Date";
+"year_label" = "Year";
 "week_label" = "Week";
 "month_label" = "Month";
-
 "amount_label" = "Amount";
-
-"users_label" = "Users";
+"campaign_label" = "Campaign";
+"click_label" = "Click";
+"impression_label" = "Impression";
+"spend_label" = "SPend";
+"revenue_label" = "Revenue";
+"average_label" = "Average";
+"ctr_label" = "Click Through Rate";
+"cvr_label" = "Conversion Rate";
+"bounce_label" = "Bounce";
+"gross_margin_label" = "Gross Margin";
