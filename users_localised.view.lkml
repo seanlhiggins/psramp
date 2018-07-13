@@ -1,3 +1,4 @@
+explore: users_localised {}
 view: users_localised {
   view_label: "users_label"
   sql_table_name: public.users ;;

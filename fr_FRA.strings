@@ -1,7 +1,26 @@
-"whole_model_label" = "Une attempte au localisacion";
-
-"users_view_label" = "Les Users";
-
-"hello" = "Bonjour";
+"whole_model_label" = "E-Commerce";
+"users_view_label" = "Utilisateurs";
+"users_label" = "Utilisateurs";
 "name" = "Nom";
+"first_name_label" = "Prenom";
 "city" = "Ville";
+"country" = "Pays";
+"age_label" = "Âge";
+"age_description" = "Âge du personne";
+"gender_label" = "Genre";
+"date_group_label" = "Date";
+"date_label" = "Date";
+"year_label" = "An";
+"week_label" = "Semain";
+"month_label" = "Mois";
+"amount_label" = "Montant";
+"campaign_label" = "Campagne";
+"click_label" = "Cliquez";
+"impression_label" = "Impression";
+"spend_label" = "Dépenser";
+"revenue_label" = "Revenu";
+"average_label" = "Moyen";
+"ctr_label" = "Taux de Clic";
+"cvr_label" = "Taux de Conversion";
+"bounce_label" = "Rebond";
+"gross_margin_label" = "Marge Brute";
