@@ -1,0 +1,14 @@
+"age_label" = "Edad";
+"age_description" = "Edad del Usuario";
+
+"gender_label" = "Sexo";
+"first_name_label" = "Primer Nombre";
+
+"date_group_label" = "Fecha";
+"date_label" = "Fecha";
+"week_label" = "Semana";
+"month_label" = "Mes";
+
+"amount_label" = "Cantidad";
+
+"users_label" = "Usuarios";
