@@ -13,6 +13,13 @@ view: products {
     suggest_dimension: brand
     }
 
+  parameter: image_url {
+    type: unquoted
+  }
+  dimension: product_image {
+    sql: 1;;
+    html: <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq7OyHRIDa1t4Mnbk6U4Ac3U_{{ products.image_url._parameter_value }}" ;;
+  }
 
   dimension: category {
     type: string
