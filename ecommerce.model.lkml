@@ -5,7 +5,7 @@ include: "*.view"
 
 # include all the dashboards
 # include: "*.dashboard"
-
+#synctest
 explore: events {
   access_filter: {
     field: users.email
