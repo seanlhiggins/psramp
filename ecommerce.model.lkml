@@ -18,6 +18,14 @@ explore: events {
   }
 }
 
+
+access_grant: category_access {
+  user_attribute: brand_name
+  allowed_values: ["Allegra K"]
+}
+
+
+
 datagroup:  default{
   sql_trigger: SELECT CURRENTDATE() ;;
 }

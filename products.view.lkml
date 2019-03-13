@@ -22,6 +22,7 @@ view: products {
   }
 
   dimension: category {
+    required_access_grants: [category_access]
     type: string
     sql: ${TABLE}.category ;;
     suggest_dimension: category
