@@ -44,11 +44,10 @@ explore: inventory_items {
 }
 
 explore: order_items {
-#   persist_with: default
-#   access_filter: {
-#     field: products.brand
-#     user_attribute: brand
-#   }
+  access_filter: {
+    field: products.brand
+    user_attribute: brand_name
+  }
 
   join: inventory_items {
     type: left_outer

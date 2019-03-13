@@ -27,10 +27,29 @@ view: products {
     suggest_dimension: category
   }
 
+parameter: metric {
+  default_value: "Rev"
+  type: unquoted
+  allowed_value: {value:"Rev"}
+  allowed_value: {value:"CPO"}
+  allowed_value: {value:"CPC"}
+  allowed_value: {value:"CPM"}
+  allowed_value: {value:"Cost"}
+  allowed_value: {value:"Clicks"}
+}
+
   dimension: test_dimension {
     type: string
-    sql: ${brand} ;;
-    html: {{_user_attributes['brand']}} ;;
+    sql: {% if metric._parameter_value == "Rev" %}'How much revenue have we made in the current period?'
+    {% elsif metric._parameter_value == "CPO" %}'What is the average Cost per Sale in the current period?'
+    {% elsif metric._parameter_value == "CPC" %}'What is the average spent per click in the current period?'
+    {% elsif metric._parameter_value == "CPM" %}'How much was spent on every thousand impressions in the current period?'
+    {% elsif metric._parameter_value == "Cost" %}'How much total budget have we spentin the current period?'
+    {% elsif metric._parameter_value == "Clicks" %}'How many total clicks have we generated in the current period?'
+    {% else %} {{ metric._parameter_value}}
+    {% endif %}
+    ;;
+#     html: {{_user_attributes['brand']}} ;;
   }
 
   dimension: department {
@@ -46,6 +65,7 @@ view: products {
   dimension: rank {
     type: number
     sql: ${TABLE}.rank ;;
+
   }
 
   dimension: retail_price {

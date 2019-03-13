@@ -21,6 +21,7 @@ view: order_items {
     type: number
     # hidden: yes
     sql: ${TABLE}.order_id ;;
+
   }
 
   dimension_group: returned {
@@ -54,6 +55,8 @@ view: order_items {
 
   measure: count {
     type: count
+    label: "Metrics"
+#     html: Count:{{value}} and Avg Spend: {{ average_spend_per_user._value }} ;;
     drill_fields: [id, inventory_items.id, orders.id]
   }
 }
