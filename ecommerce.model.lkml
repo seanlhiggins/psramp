@@ -19,10 +19,10 @@ explore: events {
 }
 
 
-access_grant: category_access {
-  user_attribute: brand_name
-  allowed_values: ["Allegra K"]
-}
+# access_grant: category_access {
+#   user_attribute: brand_name
+#   allowed_values: ["Allegra K"]
+# }
 
 
 
@@ -39,11 +39,11 @@ datagroup: items {
 explore: user_orders_facts {}
 
 explore: inventory_items {
-  persist_with: items
-  access_filter: {
-    field: products.brand
-    user_attribute: brand
-  }
+#   persist_with: items
+#   access_filter: {
+#     field: products.brand
+#     user_attribute: brand
+#   }
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
@@ -52,10 +52,6 @@ explore: inventory_items {
 }
 
 explore: order_items {
-  access_filter: {
-    field: products.brand
-    user_attribute: brand_name
-  }
 
   join: inventory_items {
     type: left_outer
