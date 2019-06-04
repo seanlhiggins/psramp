@@ -24,3 +24,4 @@
 "cvr_label" = "Conversion Rate";
 "bounce_label" = "Bounce";
 "gross_margin_label" = "Gross Margin";
+"table_calc_label" = "This is a custom Table Calc";

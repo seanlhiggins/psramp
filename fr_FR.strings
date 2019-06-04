@@ -24,3 +24,4 @@
 "cvr_label" = "Taux de Conversion";
 "bounce_label" = "Rebond";
 "gross_margin_label" = "Marge Brute";
+"table_calc_label" = "ceci est un calcul de table personnalisé";

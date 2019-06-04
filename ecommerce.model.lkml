@@ -4,7 +4,7 @@ connection: "thelook"
 include: "*.view"
 
 # include all the dashboards
-# include: "*.dashboard"
+include: "*.dashboard"
 #synctest
 explore: events {
   access_filter: {
