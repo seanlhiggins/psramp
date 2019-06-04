@@ -31,7 +31,7 @@ view: products {
 parameter: metric {
   default_value: "Rev"
   type: unquoted
-  allowed_value: {value:"Rev"}
+  allowed_value: {value:"Rev" label:"revenue_label"}
   allowed_value: {value:"CPO"}
   allowed_value: {value:"CPC"}
   allowed_value: {value:"CPM"}
@@ -41,6 +41,7 @@ parameter: metric {
 
   dimension: test_dimension {
     type: string
+    label_from_parameter: metric
     sql: {% if metric._parameter_value == "Rev" %}'How much revenue have we made in the current period?'
     {% elsif metric._parameter_value == "CPO" %}'What is the average Cost per Sale in the current period?'
     {% elsif metric._parameter_value == "CPC" %}'What is the average spent per click in the current period?'

@@ -25,3 +25,6 @@
 "bounce_label" = "Rebond";
 "gross_margin_label" = "Marge Brute";
 "table_calc_label" = "ceci est un calcul de table personnalisé";
+"loc_filter" = "ceci est un filtre";
+"revenue_metric" = "Revenu 🇫🇷";
+"text_tile_title" = "<div class=\"vis-single-value-wrapper\">C'est une title</div>";

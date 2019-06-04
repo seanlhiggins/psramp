@@ -25,3 +25,6 @@
 "bounce_label" = "Bounce";
 "gross_margin_label" = "Gross Margin";
 "table_calc_label" = "This is a custom Table Calc";
+"loc_filter" = "This is a filter";
+"revenue_metric" = "Revenue";
+"text_tile_title" = "<div class=\"vis-single-value-wrapper\">This is a Title</div>";
